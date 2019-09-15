@@ -3,30 +3,52 @@
    [re-frame.core :as rf]
    [wordsmith.subs :as subs]
    [wordsmith.events :as events]
-   ))
+   ["react-konva" :as rk]))
+
+(defn canvas* []
+  (let [words (rf/subscribe [::subs/words])
+        window (rf/subscribe [::subs/window])]
+    (fn []
+      [:> rk/Stage {:class "stage"
+                    :width (:width @window)
+                    :height (:height @window)}
+       [:> rk/Layer
+        (doall
+         (for [[word {:keys [x y vx vy]}] @words]
+           ^{:key word}
+           [:> rk/Text {:text word
+                        :x (- x (* (count word) 7))
+                        :y (- y 12)}]))
+        ]
+       ])))
+
+(defn anim-loop
+  []
+  (do (rf/dispatch [::events/anim-step])
+      (js/requestAnimationFrame anim-loop)))
+
+(def canvas
+  (with-meta canvas*
+    {:component-did-mount
+     (fn [this]
+       (js/requestAnimationFrame anim-loop))}))
 
 (defn main-panel []
-  (let [word& (rf/subscribe [::subs/word])
-        words& (rf/subscribe [::subs/words])
-        ;; word -> [x, y, x]
-        positions (rf/subscribe [::subs/positions])]
+  (let [word (rf/subscribe [::subs/word])
+        error? (rf/subscribe [::subs/error?])]
     (fn []
       [:div
+       [canvas]
        [:h1 "How many words can you think of?"]
-       [:input {:value @word&
+       [:input {:class (when @error? "error")
+                :value @word
                 :auto-focus true
+                :spellcheck false
                 :on-change (fn [e]
                              (rf/dispatch [::events/set-word
                                            (-> e .-target .-value)]))
-                :on-key-up (fn [e]
-                             (when (= (.-key e) "Enter")
-                               (rf/dispatch [::events/try-word])))}]
-       [:ul {:style {:margin-top 50}}
-        (doall
-         (for [w @words&
-               :let [[x y z] (get @positions w)]]
-           ^{:key w}
-           [:li {:style {:transform
-                         (str "translate3d(" x "px, " y "px, " z "px)")}}
-            w]))]
-       ])))
+                :on-key-down (fn [e]
+                               (when (or (= (.-key e) "Enter")
+                                         (= (.-key e) " "))
+                                 (.preventDefault e)
+                                 (rf/dispatch [::events/try-word])))}]])))

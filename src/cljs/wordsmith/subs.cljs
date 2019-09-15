@@ -13,6 +13,11 @@
    (:words db)))
 
 (re-frame/reg-sub
- ::positions
- (fn [db]
-   (:positions db)))
+ ::window
+ (fn [{:keys [window]}]
+   window))
+
+(re-frame/reg-sub
+ ::error?
+ (fn [{:keys [error?]}]
+   error?))

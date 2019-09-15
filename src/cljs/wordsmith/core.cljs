@@ -19,5 +19,7 @@
 
 (defn init []
   (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch-sync [::events/window-resized])
+  (.addEventListener js/window "resize" #(re-frame/dispatch [::events/window-resized]))
   (dev-setup)
   (mount-root))
