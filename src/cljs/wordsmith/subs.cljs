@@ -11,3 +11,8 @@
  ::words
  (fn [db]
    (:words db)))
+
+(re-frame/reg-sub
+ ::positions
+ (fn [db]
+   (:positions db)))

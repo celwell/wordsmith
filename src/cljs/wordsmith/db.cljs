@@ -2,4 +2,5 @@
 
 (def default-db
   {:word ""
-   :words []})
+   :words #{}
+   :positions {}})

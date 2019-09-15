@@ -3,7 +3,6 @@
     "shadow-cljs": "2.8.52"
   },
   "dependencies": {
-    "check-word": "^1.1.0",
     "create-react-class": "15.6.3",
     "highlight.js": "9.15.8",
     "react": "16.8.6",

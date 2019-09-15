@@ -7,7 +7,9 @@
 
 (defn main-panel []
   (let [word& (rf/subscribe [::subs/word])
-        words& (rf/subscribe [::subs/words])]
+        words& (rf/subscribe [::subs/words])
+        ;; word -> [x, y, x]
+        positions (rf/subscribe [::subs/positions])]
     (fn []
       [:div
        [:h1 "How many words can you think of?"]
@@ -20,7 +22,11 @@
                              (when (= (.-key e) "Enter")
                                (rf/dispatch [::events/try-word])))}]
        [:ul {:style {:margin-top 50}}
-        (for [w @words&]
-          ^{:key w}
-          [:li w])]
+        (doall
+         (for [w @words&
+               :let [[x y z] (get @positions w)]]
+           ^{:key w}
+           [:li {:style {:transform
+                         (str "translate3d(" x "px, " y "px, " z "px)")}}
+            w]))]
        ])))

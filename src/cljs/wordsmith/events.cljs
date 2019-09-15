@@ -2,11 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [wordsmith.db :as db]
-   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-   ["check-word" :as check-word]
-   ))
-
-(def dict (check-word "en"))
+   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]))
 
 (rf/reg-event-db
  ::initialize-db
@@ -21,15 +17,20 @@
 (rf/reg-event-fx
  ::try-word
  (fn [{:keys [db]}]
-   (.check dict (:word db))
-   ;; {:dispatch [::add-word]}
-   ))
+   (when-not ((:words db) (:word db))
+     {:dispatch [::add-word]})))
+
+(defn new-pos
+  [word]
+  (take 3 (repeatedly (partial rand-int 400))))
 
 (rf/reg-event-fx
  ::add-word
  (fn [{:keys [db]}]
    ;; TODO add to local storage
    ;;
+
    {:db (-> db
             (update-in [:words] conj (:word db))
+            (update-in [:positions] assoc (:word db) (new-pos (:word db)))
             (assoc :word ""))}))
