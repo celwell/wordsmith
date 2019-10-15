@@ -8,7 +8,7 @@
    :window {:width nil
             :height nil}
    :g 0.13
-   :k 0.95
+   :k 0.8
    ;; coefficient of restitution
    :cr 0.6
    :error? false})

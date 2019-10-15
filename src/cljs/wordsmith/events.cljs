@@ -35,14 +35,16 @@
  (fn [{:keys [db]}]
    ;; TODO add to local storage
    ;;
-
-   {:db (-> db
-            (update-in [:words] assoc (s/trim (:word db))
-                       {:x (rand-int (-> db :window :width))
-                        :y 0
-                        :vx (- (rand 5) 2.5)
-                        :vy 0})
-            (assoc :word ""))}))
+   (let [word (s/trim (:word db))]
+     {:db (-> db
+              (update-in [:words] assoc word
+                         {;; :x (rand-int (-> db :window :width))
+                          :x 65
+                          :y 120
+                          ;; :vx (- (rand 5) 2.5)
+                          :vx (rand 4)
+                          :vy (rand -1)})
+              (assoc :word ""))})))
 
 (rf/reg-event-fx
  ::window-resized

@@ -17,8 +17,12 @@
          (for [[word {:keys [x y vx vy]}] @words]
            ^{:key word}
            [:> rk/Text {:text word
-                        :x (- x (* (count word) 7))
-                        :y (- y 12)}]))
+                        ;; :x (- x (* (count word) 7))
+                        ;; :y (- y 12)
+                        :x x
+                        :y (- y 28)
+                        :fontFamily "courier new"
+                        :fontSize 28}]))
         ]
        ])))
 
