@@ -1,5 +1,6 @@
 /*.log
 /target
 /*-init.clj
-/resources/public/js/compiled
+# allow this for GH pages
+# /resources/public/js/compiled
 out

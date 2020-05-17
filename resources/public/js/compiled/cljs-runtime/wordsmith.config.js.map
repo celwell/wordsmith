@@ -1,0 +1,1 @@
+{"version":3,"sources":["wordsmith/config.cljs"],"mappings":";;AAEA,AAAKA,AACMC","names":["wordsmith.config/debug?","js/goog.DEBUG"],"sourcesContent":["(ns wordsmith.config)\n\n(def debug?\n  ^boolean goog.DEBUG)\n"]}
