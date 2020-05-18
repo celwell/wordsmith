@@ -2,13 +2,13 @@
   (:require
    [re-frame.core :as rf]
    [wordsmith.db :as db]
-   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
+   ;; [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [clojure.string :as s]))
 
 (rf/reg-event-db
  ::initialize-db
- (fn-traced [_ _]
-            db/default-db))
+ (fn [_ _]
+   db/default-db))
 
 (rf/reg-event-fx
  ::set-word
@@ -17,18 +17,20 @@
             (assoc :word word)
             (assoc :error? false))}))
 
+(defn- word-already-exists
+  [db]
+  (-> db ; make it jump
+      (update-in [:words (:word db)] merge {:vx (- (rand 10) 5)
+                                            :vy (rand -10)})
+      (assoc :error? true)))
+
 (rf/reg-event-fx
  ::try-word
  (fn [{:keys [db]}]
    (if (and (nil? (get (:words db) (:word db)))
             (not (s/blank? (:word db))))
      {:dispatch [::add-word]}
-     {:db (-> db
-              (update-in [:words] assoc (:word db)
-                         (merge (get (:words db) (:word db))
-                                {:vx (- (rand 10) 5)
-                                 :vy (rand -10)}))
-              (assoc :error? true))})))
+     {:db (word-already-exists db)})))
 
 (rf/reg-event-fx
  ::add-word
@@ -38,10 +40,8 @@
    (let [word (s/trim (:word db))]
      {:db (-> db
               (update-in [:words] assoc word
-                         {;; :x (rand-int (-> db :window :width))
-                          :x 65
+                         {:x 65
                           :y 120
-                          ;; :vx (- (rand 5) 2.5)
                           :vx (rand 4)
                           :vy (rand -1)})
               (assoc :word ""))})))
@@ -54,48 +54,44 @@
             (assoc-in [:window :height] (.-innerHeight js/window)))}))
 
 (defn velocity
-  [m k v]
-  (assoc m k (-> v
-                 (update :x + (:vx v))
-                 (update :y + (:vy v)))))
+  [{:keys [vx vy] :as word}]
+  (-> word
+      (update :x + vx)
+      (update :y + vy)))
 
 (defn gravity
-  [{:keys [g]} m k v]
-  (assoc m k (update v :vy + g)))
+  [{:keys [g]} word]
+  (update word :vy + g))
 
 (defn friction
-  [{:keys [window k]} m wk {:keys [x y vx vy] :as v}]
-  (assoc m wk (cond-> v
-                (or (= y 0)
-                    (= y (:height window))) (update :vx * k)
-                (or (= x 0)
-                    (= x (:width window))) (update :vy * k))))
+  [{:keys [window k]} {:keys [x y] :as word}]
+  (let [{:keys [width height]} window]
+    (cond-> word
+      (or (= y 0) (= y height)) (update :vx * k)
+      (or (= x 0) (= x width))  (update :vy * k))))
 
 (defn border
-  [{:keys [window cr]} m k {:keys [x y vx vy] :as v}]
+  [{:keys [window cr]} {:keys [x y vx vy] :as word}]
   (let [{:keys [width height]} window]
-    (assoc m k (cond-> v
-                 (> x width) (assoc :vx (* vx -1 cr)
-                                    :x width)
-                 (> y height) (assoc :vy (* vy -1 cr)
-                                     :y height)
-                 (< x 0) (assoc :vx (* vx -1 cr)
-                                :x 0)
-                 (< y 0) (assoc :vy (* vy -1 cr)
-                                :y 0)))))
+    (cond-> word
+      (> x width)  (assoc :vx (* vx -1 cr)
+                          :x width)
+      (> y height) (assoc :vy (* vy -1 cr)
+                          :y height)
+      (< x 0)      (assoc :vx (* vx -1 cr)
+                          :x 0)
+      (< y 0)      (assoc :vy (* vy -1 cr)
+                          :y 0))))
 
-(rf/reg-event-fx
+(defn fmap
+  [f m]
+  (into (empty m) (for [[k v] m] [k (f v)])))
+
+(rf/reg-event-db
  ::anim-step
- (fn [{:keys [db]}]
-   (let [words (:words db)]
-     {:db (assoc db
-                 :words ;; TODO transducer?
-                 (->> words
-                      (reduce-kv (partial gravity db) {})
-                      (reduce-kv (partial friction db) {})
-                      (reduce-kv velocity {})
-                      (reduce-kv (partial border db) {}))
-                 #_(reduce-kv (comp (partial gravity db)
-                                    velocity)
-                              {}
-                              words))})))
+ (fn [db]
+   (update-in db [:words] #(->> %
+                                (fmap (partial gravity db))
+                                (fmap (partial friction db))
+                                (fmap velocity)
+                                (fmap (partial border db))))))

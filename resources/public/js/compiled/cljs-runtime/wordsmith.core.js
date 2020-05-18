@@ -18,15 +18,15 @@ wordsmith.core.mount_root = (function wordsmith$core$mount_root(){
 return reagent.core.render.cljs$core$IFn$_invoke$arity$2(new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [wordsmith.views.main_panel], null),document.getElementById("app"));
 });
 wordsmith.core.init = (function wordsmith$core$init(){
-var G__61091_61094 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","initialize-db","wordsmith.events/initialize-db",-775332146)], null);
-(re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1(G__61091_61094) : re_frame.core.dispatch_sync.call(null,G__61091_61094));
+var G__42616_42619 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","initialize-db","wordsmith.events/initialize-db",-775332146)], null);
+(re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1(G__42616_42619) : re_frame.core.dispatch_sync.call(null,G__42616_42619));
 
-var G__61092_61095 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","window-resized","wordsmith.events/window-resized",-390773337)], null);
-(re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1(G__61092_61095) : re_frame.core.dispatch_sync.call(null,G__61092_61095));
+var G__42617_42620 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","window-resized","wordsmith.events/window-resized",-390773337)], null);
+(re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch_sync.cljs$core$IFn$_invoke$arity$1(G__42617_42620) : re_frame.core.dispatch_sync.call(null,G__42617_42620));
 
 window.addEventListener("resize",(function (){
-var G__61093 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","window-resized","wordsmith.events/window-resized",-390773337)], null);
-return (re_frame.core.dispatch.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch.cljs$core$IFn$_invoke$arity$1(G__61093) : re_frame.core.dispatch.call(null,G__61093));
+var G__42618 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("wordsmith.events","window-resized","wordsmith.events/window-resized",-390773337)], null);
+return (re_frame.core.dispatch.cljs$core$IFn$_invoke$arity$1 ? re_frame.core.dispatch.cljs$core$IFn$_invoke$arity$1(G__42618) : re_frame.core.dispatch.call(null,G__42618));
 }));
 
 wordsmith.core.dev_setup();

@@ -1,9 +1,8 @@
 (ns wordsmith.views
-  (:require
-   [re-frame.core :as rf]
-   [wordsmith.subs :as subs]
-   [wordsmith.events :as events]
-   ["react-konva" :as rk]))
+  (:require [re-frame.core :as rf]
+            [wordsmith.subs :as subs]
+            [wordsmith.events :as events]
+            ["react-konva" :as rk]))
 
 (defn canvas* []
   (let [words (rf/subscribe [::subs/words])
@@ -22,19 +21,17 @@
                         :x x
                         :y (- y 28)
                         :fontFamily "courier new"
-                        :fontSize 28}]))
-        ]
-       ])))
+                        :fontSize 28}]))]])))
 
 (defn anim-loop
   []
-  (do (rf/dispatch [::events/anim-step])
-      (js/requestAnimationFrame anim-loop)))
+  (rf/dispatch [::events/anim-step])
+  (js/requestAnimationFrame anim-loop))
 
 (def canvas
   (with-meta canvas*
     {:component-did-mount
-     (fn [this]
+     (fn [_this]
        (js/requestAnimationFrame anim-loop))}))
 
 (defn main-panel []
