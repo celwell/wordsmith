@@ -7,8 +7,7 @@
    :words {}
    :window {:width nil
             :height nil}
-   :g 0.13
-   :k 0.8
-   ;; coefficient of restitution
-   :cr 0.6
+   :g 0.13 ; gravity
+   :k 0.8  ; friction
+   :cr 0.6 ; coefficient of restitution
    :error? false})

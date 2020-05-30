@@ -1,5 +1,6 @@
 (ns wordsmith.views
   (:require [re-frame.core :as rf]
+            [wordsmith.util :as util]
             [wordsmith.subs :as subs]
             [wordsmith.events :as events]
             ["react-konva" :as rk]))
@@ -16,12 +17,22 @@
          (for [[word {:keys [x y vx vy]}] @words]
            ^{:key word}
            [:> rk/Text {:text word
-                        ;; :x (- x (* (count word) 7))
-                        ;; :y (- y 12)
-                        :x x
-                        :y (- y 28)
+                        :x (int (- x (/ (util/word-width word) 2)))
+                        :y (int (- y (/ (util/word-height word) 2)))
                         :fontFamily "courier new"
-                        :fontSize 28}]))]])))
+                        :fontSize util/font-size}]))
+        (doall
+         (for [[word {:keys [x y vx vy]}] @words]
+           ^{:key word}
+           [:> rk/Rect {:x (int (- x (/ (util/word-width word) 2)))
+                        :y (int (- y (/ (util/word-height word) 2)))
+                        :width (util/word-width word)
+                        :height (util/word-height word)
+                        :fill "rgba(200,0,0,0.5)"
+                        :stroke "black"
+                        :strokeWidth 1
+                        }]))
+        ]])))
 
 (defn anim-loop
   []
@@ -44,7 +55,7 @@
        [:input {:class (when @error? "error")
                 :value @word
                 :auto-focus true
-                :spellcheck false
+                :spellCheck false
                 :on-change (fn [e]
                              (rf/dispatch [::events/set-word
                                            (-> e .-target .-value)]))

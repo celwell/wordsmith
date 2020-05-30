@@ -241,6 +241,7 @@ cljs$core$build_subvec:Uf
 cljs$core$butlast:ah
 cljs$core$char_escapes:mh
 cljs$core$chunk_append:pe
+cljs$core$chunk_buffer:yj
 cljs$core$chunk_cons:oe
 cljs$core$chunked_seq:Jf
 cljs$core$chunked_seq$cljs$0core$0IFn$0_invoke$0arity$04:If
@@ -333,6 +334,7 @@ cljs$core$map_entry_QMARK_:Nf
 cljs$core$mapv$cljs$0core$0IFn$0_invoke$0arity$02:hf
 cljs$core$max:be
 cljs$core$max_key:bh
+cljs$core$memoize:Rl
 cljs$core$merge:Vg
 cljs$core$meta:Bd
 cljs$core$missing_protocol:gb
@@ -463,6 +465,7 @@ cljs$cst$keyword$error_QMARK_:cj
 cljs$cst$keyword$event:ej
 cljs$cst$keyword$exception:si
 cljs$cst$keyword$fallback_DASH_impl:th
+cljs$cst$keyword$fill:Xl
 cljs$cst$keyword$finish_DASH_run:ui
 cljs$cst$keyword$flush_DASH_dom:Ji
 cljs$cst$keyword$flush_DASH_on_DASH_newline:Xa
@@ -511,8 +514,10 @@ cljs$cst$keyword$scheduled:bj
 cljs$cst$keyword$sequential:xi
 cljs$cst$keyword$set:Wi
 cljs$cst$keyword$shouldComponentUpdate:qj
-cljs$cst$keyword$spellcheck:yj
+cljs$cst$keyword$spellCheck:Ul
 cljs$cst$keyword$stack:gi
+cljs$cst$keyword$stroke:Sl
+cljs$cst$keyword$strokeWidth:Tl
 cljs$cst$keyword$sub:Mi
 cljs$cst$keyword$text:zj
 cljs$cst$keyword$trigger:Qi
@@ -559,7 +564,7 @@ clojure$string$join$cljs$0core$0IFn$0_invoke$0arity$02:Rj
 clojure$string$replace:Qj
 clojure$string$replace_all:Oj
 clojure$string$replace_with:Pj
-cur$jscomp$inline_1177:Tl
+cur$jscomp$inline_1196:rn
 goog$UID_PROPERTY_:ha
 goog$array$toArray:La
 goog$async$nextTick:Zl
@@ -588,10 +593,10 @@ module$node_modules$create_react_class$index:dk
 module$node_modules$react$index:Nj
 module$node_modules$react_dom$index:Jl
 module$node_modules$react_konva$lib$ReactKonva:nn
-navigator$jscomp$inline_788:Xl
-opt_object$jscomp$inline_1174:Rl
-part$jscomp$inline_1178:Ul
-parts$jscomp$inline_1176:Sl
+navigator$jscomp$inline_793:tn
+opt_object$jscomp$inline_1193:Yl
+part$jscomp$inline_1197:sn
+parts$jscomp$inline_1195:qn
 re_frame:$l
 re_frame$cofx$inject_db:Qm
 re_frame$core$reg_event_db:bn
@@ -737,12 +742,14 @@ shadow$js$files:Jj
 shadow$js$jsRequire:Mj
 shadow$js$nativeRequires:Kj
 shadow$js$requireStack:Lj
-userAgent$jscomp$inline_789:Yl
+userAgent$jscomp$inline_794:un
 wordsmith$db$default_db:dn
 wordsmith$events$border:hn
 wordsmith$events$friction:gn
 wordsmith$events$gravity:fn
 wordsmith$events$velocity:en
+wordsmith$util$word_height:wn
+wordsmith$util$word_width:vn
 wordsmith$views$anim_loop:on
 wordsmith$views$canvas:pn
 wordsmith$views$main_panel:Ql
