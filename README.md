@@ -1,8 +1,10 @@
-# wordsmith
+# Wordsmith
 
-A [re-frame](https://github.com/Day8/re-frame) application designed to ... well, that part is up to you.
+How many words can you think of?
 
-## Development Mode
+[Play on GitHub.io](https://celwell.github.io/wordsmith/resources/public/index.html)
+
+## Development
 
 ### Run application:
 
@@ -17,3 +19,7 @@ Wait a bit, then browse to [http://localhost:8280](http://localhost:8280).
 
 ## Production Build
 
+```
+lein clean
+lein prod
+```
