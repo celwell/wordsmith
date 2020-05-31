@@ -9,5 +9,5 @@
             :height nil}
    :g 0.13 ; gravity
    :k 0.8  ; friction
-   :cr 0.6 ; coefficient of restitution
+   :cr 0.4 ; coefficient of restitution
    :error? false})

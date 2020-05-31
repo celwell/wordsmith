@@ -19,10 +19,8 @@
 (defn- word-already-exists
   [db]
   (-> db ; make it jump
-      ;; (update-in [:words (:word db)] merge {:vx (- (rand 10) 5)
-      ;;                                       :vy (rand -10)})
-      (update-in [:words (:word db)] merge {:vx (- (rand 100) 5)
-                                            :vy (rand -20)})
+      (update-in [:words (:word db)] merge {:vx (- (rand 30) 15)
+                                            :vy (rand -15)})
       (assoc :error? true)))
 
 (rf/reg-event-fx
@@ -43,7 +41,9 @@
               (update-in [:words] assoc word
                          {:x 65
                           :y 120
-                          :vx (rand 4)
+                          :prev-x 65
+                          :prev-y 120
+                          :vx (rand 5)
                           :vy (rand -1)})
               (assoc :word ""))})))
 
@@ -55,8 +55,10 @@
             (assoc-in [:window :height] (.-innerHeight js/window)))}))
 
 (defn velocity
-  [[word-key {:keys [vx vy] :as word}]]
+  [[word-key {:keys [x y vx vy] :as word}]]
   [word-key (-> word
+                (assoc :prev-x x)
+                (assoc :prev-y y)
                 (update :x + vx)
                 (update :y + vy))])
 
@@ -98,11 +100,104 @@
   [word-key words]
   (remove (comp (partial = word-key) key) words))
 
-;; (defn collisions
-;;   [{:keys [words]} [word-key {:keys [x y vx vy] :as word}]]
-;;   (reduce-kv maybe-collide words)
-;;   (for [neighbor (neighbors word-key words)]
-;;     [word-key word]))
+(defn intersecting?
+  [w-top-edge w-right-edge w-bottom-edge w-left-edge
+   nw-top-edge nw-right-edge nw-bottom-edge nw-left-edge]
+  (and (or (< nw-top-edge w-top-edge nw-bottom-edge)
+           (> nw-bottom-edge w-bottom-edge nw-top-edge))
+       (or (> nw-right-edge w-right-edge nw-left-edge)
+           (< nw-left-edge w-left-edge nw-right-edge))))
+
+(defn solve-collision
+  [word neighbor w-key k cr]
+  ;; w-  prefix means "word-"
+  ;; nw- prefix means "neighbor-word-"
+  (let [{w-x :x   w-y :y
+         w-vx :vx w-vy :vy
+         w-prev-x :prev-x w-prev-y :prev-y} word
+        [nw-key {nw-x :x nw-y :y
+                 nw-vx :vx nw-vy :vy
+                 nw-prev-x :prev-x nw-prev-y :prev-y}] neighbor
+        half-w-width (/ (util/word-width w-key) 2)
+        half-w-height (/ (util/word-height w-key) 2)
+        half-nw-width (/ (util/word-width nw-key) 2)
+        half-nw-height (/ (util/word-height nw-key) 2)
+
+        w-top-edge     (- w-y half-w-height)
+        w-right-edge   (+ w-x half-w-width)
+        w-bottom-edge  (+ w-y half-w-height)
+        w-left-edge    (- w-x half-w-width)
+        nw-top-edge    (- nw-y half-nw-height)
+        nw-right-edge  (+ nw-x half-nw-width)
+        nw-bottom-edge (+ nw-y half-nw-height)
+        nw-left-edge   (- nw-x half-nw-width)
+
+        w-prev-top-edge     (- w-prev-y half-w-height)
+        w-prev-right-edge   (+ w-prev-x half-w-width)
+        w-prev-bottom-edge  (+ w-prev-y half-w-height)
+        w-prev-left-edge    (- w-prev-x half-w-width)
+        nw-prev-top-edge    (- nw-prev-y half-nw-height)
+        nw-prev-right-edge  (+ nw-prev-x half-nw-width)
+        nw-prev-bottom-edge (+ nw-prev-y half-nw-height)
+        nw-prev-left-edge   (- nw-prev-x half-nw-width)
+
+        ;; relative velocities
+        ;; dvx (- vx1 vx2)
+        ;; dvy (- vy1 vy2)
+
+        intersects? (intersecting? w-top-edge
+                                   w-right-edge
+                                   w-bottom-edge
+                                   w-left-edge
+                                   nw-top-edge
+                                   nw-right-edge
+                                   nw-bottom-edge
+                                   nw-left-edge)]
+    (cond
+      (and intersects?
+           (> w-bottom-edge nw-top-edge)
+           (not (> w-prev-bottom-edge nw-prev-top-edge))
+           (pos? w-vy))
+      (assoc word
+             :y  (- w-y w-vy)
+             :vy (* (Math/abs w-vy) -1 cr)
+             :vx (* w-vx k))
+
+      (and intersects?
+           (< w-top-edge nw-bottom-edge)
+           (not (< w-prev-top-edge nw-prev-bottom-edge))
+           (neg? w-vy))
+      (assoc word
+             :y  (- w-y w-vy)
+             :vy (* (Math/abs w-vy) cr)
+             :vx (* w-vx k))
+      
+      (and intersects?
+           (> w-right-edge nw-left-edge)
+           (not (> w-prev-right-edge nw-prev-left-edge))
+           (pos? w-vx))
+      (assoc word
+             :x  (- w-x w-vx)
+             :vx (* (Math/abs w-vx) -1 cr)
+             :vy (* w-vy k))
+
+      (and intersects?
+           (< w-left-edge nw-right-edge)
+           (not (< w-prev-left-edge nw-prev-right-edge))
+           (neg? w-vx))
+      (assoc word
+             :x  (- w-x w-vx)
+             :vx (* (Math/abs w-vx) cr)
+             :vy (* w-vy k))
+
+      :else word)))
+
+(defn collisions
+  [{:keys [words k cr]} [word-key {:keys [x y vx vy] :as word}]]
+  [word-key (reduce (fn [w neighbor]
+                      (solve-collision w neighbor word-key k cr))
+                    word
+                    (neighbors word-key words))])
 
 ;; (defn fmap
 ;;   [f m]
@@ -120,10 +215,8 @@
                                 ;; do velocity
                                 (map velocity)
                                 (into {})
-                                ;; handle collisions
-                                (map (partial border db))
+                                ;; collide
+                                (map (partial collisions db))
                                 (into {})
-                                
-                                ;; (map (partial collisions db))
-                                ;; (into {})
-                                ))))
+                                (map (partial border db))
+                                (into {})))))

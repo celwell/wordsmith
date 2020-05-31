@@ -105,6 +105,7 @@ cljs$core$INext:Cb
 cljs$core$IPrintWithWriter:jc
 cljs$core$IRecord:hc
 cljs$core$IReduce:Yb
+cljs$core$IReversible:yj
 cljs$core$ISeq:zb
 cljs$core$ISeqable:dc
 cljs$core$ISequential:fc
@@ -142,6 +143,7 @@ cljs$core$PersistentVector:X
 cljs$core$PersistentVector$EMPTY:rd
 cljs$core$PersistentVector$EMPTY_NODE:Y
 cljs$core$PersistentVector$fromArray:Kf
+cljs$core$RSeq:Tl
 cljs$core$Range:eh
 cljs$core$RangeChunk:ch
 cljs$core$RangeIterator:dh
@@ -206,6 +208,7 @@ cljs$core$_reduce:Zb
 cljs$core$_remove_watch:mc
 cljs$core$_reset_BANG_:wc
 cljs$core$_rest:Bb
+cljs$core$_rseq:Sl
 cljs$core$_seq:ec
 cljs$core$_swap_BANG_:xc
 cljs$core$_val:Lb
@@ -241,7 +244,6 @@ cljs$core$build_subvec:Uf
 cljs$core$butlast:ah
 cljs$core$char_escapes:mh
 cljs$core$chunk_append:pe
-cljs$core$chunk_buffer:yj
 cljs$core$chunk_cons:oe
 cljs$core$chunked_seq:Jf
 cljs$core$chunked_seq$cljs$0core$0IFn$0_invoke$0arity$04:If
@@ -252,6 +254,7 @@ cljs$core$ci_reduce$cljs$0core$0IFn$0_invoke$0arity$03:ed
 cljs$core$clj__GT_js:Ch
 cljs$core$clone_and_set$cljs$0core$0IFn$0_invoke$0arity$03:sg
 cljs$core$coll_QMARK_:Fd
+cljs$core$comp:qn
 cljs$core$complement:Oe
 cljs$core$concat:se
 cljs$core$conj:qd
@@ -387,7 +390,9 @@ cljs$core$remove_pair:tg
 cljs$core$repeat$cljs$0core$0IFn$0_invoke$0arity$02:cf
 cljs$core$reset_BANG_:We
 cljs$core$rest:Qc
+cljs$core$reverse:Yl
 cljs$core$seq:D
+cljs$core$seq_reduce:Xl
 cljs$core$seq_reduce$cljs$0core$0IFn$0_invoke$0arity$02:Rd
 cljs$core$seq_reduce$cljs$0core$0IFn$0_invoke$0arity$03:Sd
 cljs$core$sequential_QMARK_:Hd
@@ -465,7 +470,6 @@ cljs$cst$keyword$error_QMARK_:cj
 cljs$cst$keyword$event:ej
 cljs$cst$keyword$exception:si
 cljs$cst$keyword$fallback_DASH_impl:th
-cljs$cst$keyword$fill:Xl
 cljs$cst$keyword$finish_DASH_run:ui
 cljs$cst$keyword$flush_DASH_dom:Ji
 cljs$cst$keyword$flush_DASH_on_DASH_newline:Xa
@@ -499,6 +503,8 @@ cljs$cst$keyword$on_DASH_set:oi
 cljs$cst$keyword$on_DASH_write:Ti
 cljs$cst$keyword$pause:xj
 cljs$cst$keyword$paused:Di
+cljs$cst$keyword$prev_DASH_x:sn
+cljs$cst$keyword$prev_DASH_y:rn
 cljs$cst$keyword$print_DASH_length:bb
 cljs$cst$keyword$queue:li
 cljs$cst$keyword$re_DASH_frame_DOT_std_DASH_interceptors_SLASH_not_DASH_found:jj
@@ -508,6 +514,7 @@ cljs$cst$keyword$reagentRender:ii
 cljs$cst$keyword$reagent_DASH_render:Ni
 cljs$cst$keyword$render:Lh
 cljs$cst$keyword$resume:tj
+cljs$cst$keyword$rotation:tn
 cljs$cst$keyword$run_DASH_queue:Aj
 cljs$cst$keyword$running:Zh
 cljs$cst$keyword$scheduled:bj
@@ -516,8 +523,6 @@ cljs$cst$keyword$set:Wi
 cljs$cst$keyword$shouldComponentUpdate:qj
 cljs$cst$keyword$spellCheck:Ul
 cljs$cst$keyword$stack:gi
-cljs$cst$keyword$stroke:Sl
-cljs$cst$keyword$strokeWidth:Tl
 cljs$cst$keyword$sub:Mi
 cljs$cst$keyword$text:zj
 cljs$cst$keyword$trigger:Qi
@@ -564,7 +569,7 @@ clojure$string$join$cljs$0core$0IFn$0_invoke$0arity$02:Rj
 clojure$string$replace:Qj
 clojure$string$replace_all:Oj
 clojure$string$replace_with:Pj
-cur$jscomp$inline_1196:rn
+cur$jscomp$inline_1240:yn
 goog$UID_PROPERTY_:ha
 goog$array$toArray:La
 goog$async$nextTick:Zl
@@ -593,10 +598,10 @@ module$node_modules$create_react_class$index:dk
 module$node_modules$react$index:Nj
 module$node_modules$react_dom$index:Jl
 module$node_modules$react_konva$lib$ReactKonva:nn
-navigator$jscomp$inline_793:tn
-opt_object$jscomp$inline_1193:Yl
-part$jscomp$inline_1197:sn
-parts$jscomp$inline_1195:qn
+navigator$jscomp$inline_803:An
+opt_object$jscomp$inline_1237:un
+part$jscomp$inline_1241:zn
+parts$jscomp$inline_1239:xn
 re_frame:$l
 re_frame$cofx$inject_db:Qm
 re_frame$core$reg_event_db:bn
@@ -742,11 +747,13 @@ shadow$js$files:Jj
 shadow$js$jsRequire:Mj
 shadow$js$nativeRequires:Kj
 shadow$js$requireStack:Lj
-userAgent$jscomp$inline_794:un
+userAgent$jscomp$inline_804:Bn
 wordsmith$db$default_db:dn
 wordsmith$events$border:hn
+wordsmith$events$collisions:Dn
 wordsmith$events$friction:gn
 wordsmith$events$gravity:fn
+wordsmith$events$neighbors:Cn
 wordsmith$events$velocity:en
 wordsmith$util$word_height:wn
 wordsmith$util$word_width:vn

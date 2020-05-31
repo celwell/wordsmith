@@ -24,10 +24,13 @@
       (not (neg? (.indexOf word "b")))))
 
 (defn word-height* [word]
-  font-size
+  ;; font-size
+  (* font-size 0.75)
+  
   ;; (+ (* font-size 0.6)
   ;;    (when (contains-tall-letter? word) (* font-size 0.2))
   ;;    (when (contains-descender? word) (* font-size 0.2)))
+  
   )
 
 (def word-height (memoize word-height*))

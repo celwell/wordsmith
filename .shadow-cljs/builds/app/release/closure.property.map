@@ -14,6 +14,7 @@ cause:bc
 cb:cc
 chunk:ia
 chunk_next:Eb
+ci:dd
 cljs$core$APersistentVector$:Sb
 cljs$core$Fn$:sc
 cljs$core$IAssociative$_assoc$arity$3:Xa
@@ -93,6 +94,8 @@ cljs$core$IReduce$:Ec
 cljs$core$IReduce$_reduce$arity$2:ja
 cljs$core$IReduce$_reduce$arity$3:ka
 cljs$core$IReset$_reset_BANG_$arity$2:oa
+cljs$core$IReversible$:ed
+cljs$core$IReversible$_rseq$arity$1:cd
 cljs$core$ISeq$:N
 cljs$core$ISeq$_first$arity$1:ha
 cljs$core$ISeq$_rest$arity$1:la

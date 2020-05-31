@@ -14,24 +14,35 @@
                     :height (:height @window)}
        [:> rk/Layer
         (doall
-         (for [[word {:keys [x y vx vy]}] @words]
+         (for [[word {:keys [x y vx vy]}] @words
+               ;; :let [_ (println vx vy)]
+               ]
            ^{:key word}
            [:> rk/Text {:text word
                         :x (int (- x (/ (util/word-width word) 2)))
                         :y (int (- y (/ (util/word-height word) 2)))
+                        :rotation (int (* 360 (/ vy 330)))
+                        ;; :color (str "rgb(0, 0, " (int (* 255 (/ vx 10))) ")")
                         :fontFamily "courier new"
-                        :fontSize util/font-size}]))
-        (doall
-         (for [[word {:keys [x y vx vy]}] @words]
-           ^{:key word}
-           [:> rk/Rect {:x (int (- x (/ (util/word-width word) 2)))
-                        :y (int (- y (/ (util/word-height word) 2)))
-                        :width (util/word-width word)
-                        :height (util/word-height word)
-                        :fill "rgba(200,0,0,0.5)"
-                        :stroke "black"
-                        :strokeWidth 1
+
+                        ;; TODO add z dimension w/ larger text?
+                        ;; :fontSize (int (+ util/font-size
+                        ;;                   (* util/font-size
+                        ;;                      (/ (Math/abs y) (:height @window)))))
+                        :fontSize util/font-size
+
                         }]))
+        ;; (doall
+        ;;  (for [[word {:keys [x y vx vy]}] @words]
+        ;;    ^{:key word}
+        ;;    [:> rk/Rect {:x (int (- x (/ (util/word-width word) 2)))
+        ;;                 :y (int (- y (/ (util/word-height word) 2)))
+        ;;                 :width (util/word-width word)
+        ;;                 :height (util/word-height word)
+        ;;                 :fill "rgba(200,0,0,0.5)"
+        ;;                 :stroke "black"
+        ;;                 :strokeWidth 1
+        ;;                 }]))
         ]])))
 
 (defn anim-loop
