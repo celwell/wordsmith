@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [wordsmith.util :as util]
             [wordsmith.db :as db]
+            [wordsmith.dictionary :as dictionary]
             [clojure.string :as s]))
 
 (rf/reg-event-db
@@ -13,23 +14,33 @@
  ::set-word
  (fn [{:keys [db]} [_ word]]
    {:db (-> db
-            (assoc :word word)
+            (assoc :word (s/lower-case word))
             (assoc :error? false))}))
+
+(defn- word-error
+  [db]
+  (assoc db :error? true))
+
+(defn- in-dictionary?
+  [word]
+  (dictionary/word-list word))
 
 (defn- word-already-exists
   [db]
-  (-> db ; make it jump
+  (-> db                                ; make it jump
       (update-in [:words (:word db)] merge {:vx (- (rand 30) 15)
                                             :vy (rand -15)})
-      (assoc :error? true)))
+      word-error))
 
 (rf/reg-event-fx
  ::try-word
  (fn [{:keys [db]}]
-   (if (and (nil? (get (:words db) (:word db)))
-            (not (s/blank? (:word db))))
-     {:dispatch [::add-word]}
-     {:db (word-already-exists db)})))
+   (if (and (not (s/blank? (:word db)))
+            (in-dictionary? (:word db)))
+     (if (nil? (get (:words db) (:word db)))
+       {:dispatch [::add-word]}
+       {:db (word-already-exists db)})
+     {:db (word-error db)})))
 
 (rf/reg-event-fx
  ::add-word

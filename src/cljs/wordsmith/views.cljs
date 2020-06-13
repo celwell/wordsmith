@@ -21,7 +21,7 @@
            [:> rk/Text {:text word
                         :x (int (- x (/ (util/word-width word) 2)))
                         :y (int (- y (/ (util/word-height word) 2)))
-                        :rotation (int (* 360 (/ vy 330)))
+                        :rotation (int (* 360 (/ vy 350)))
                         ;; :color (str "rgb(0, 0, " (int (* 255 (/ vx 10))) ")")
                         :fontFamily "courier new"
 
@@ -68,8 +68,7 @@
                 :auto-focus true
                 :spellCheck false
                 :on-change (fn [e]
-                             (rf/dispatch [::events/set-word
-                                           (-> e .-target .-value)]))
+                             (rf/dispatch [::events/set-word (.. e -target -value)]))
                 :on-key-down (fn [e]
                                (when (or (= (.-key e) "Enter")
                                          (= (.-key e) " "))
