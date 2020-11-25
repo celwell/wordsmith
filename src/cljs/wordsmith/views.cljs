@@ -32,6 +32,7 @@
                         :fontSize util/font-size
 
                         }]))
+        ;; bounding box for debugging
         ;; (doall
         ;;  (for [[word {:keys [x y vx vy]}] @words]
         ;;    ^{:key word}

@@ -8,6 +8,9 @@
 
 (def word-width (memoize word-width*))
 
+(defn half-word-width [word]
+  (/ (word-width word) 2))
+
 (defn contains-descender? [word]
   (or (not (neg? (.indexOf word "j")))
       (not (neg? (.indexOf word "p")))
@@ -34,3 +37,6 @@
   )
 
 (def word-height (memoize word-height*))
+
+(defn half-word-height [word]
+  (/ (word-height word) 2))
